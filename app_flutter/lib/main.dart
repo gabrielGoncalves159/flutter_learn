@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool opacidade = true;
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +31,28 @@ class MyApp extends StatelessWidget {
           ),
           backgroundColor: Colors.blueAccent,
         ),
-        body: ListView(
-          children: [
-            Task('Aprender Flutter', 'https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large', 0),
-            Task('Tocar guitarra', 'https://akamai.sscdn.co/gcs/cifra-blog/pt/wp-content/uploads/2022/03/5730533-tocando-guitarra-rapido.jpg', 3),
-            Task('Meditar', 'https://manhattanmentalhealthcounseling.com/wp-content/uploads/2019/06/Top-5-Scientific-Findings-on-MeditationMindfulness-881x710.jpeg', 5),
-            Task('Aprender teste', 'https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large', 2),
-            Task('Aprender Aprender', 'https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large', 4),
-          ],
+        body: AnimatedOpacity(
+          opacity: (opacidade) ? 1 : 0,
+          duration: Duration(milliseconds: 800),
+          child: ListView(
+            children: [
+              Task('Aprender Flutter', 'https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large', 0),
+              Task('Tocar guitarra', 'https://akamai.sscdn.co/gcs/cifra-blog/pt/wp-content/uploads/2022/03/5730533-tocando-guitarra-rapido.jpg', 3),
+              Task('Meditar', 'https://manhattanmentalhealthcounseling.com/wp-content/uploads/2019/06/Top-5-Scientific-Findings-on-MeditationMindfulness-881x710.jpeg', 5),
+              Task('Aprender teste', 'https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large', 2),
+              Task('Aprender Aprender', 'https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large', 4),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, backgroundColor: Colors.blueAccent),
+          onPressed: () {
+            setState(() {
+              opacidade = !opacidade;
+            });
+          }, 
+          backgroundColor: Colors.blueAccent,
+          child: Icon(Icons.remove_red_eye),
+        ),
       ),
     );
   }
@@ -62,25 +80,37 @@ class _TaskState extends State<Task> {
         child: Stack(
           children: [
             Container(
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.blue,
+              ),
               height: 140,
             ),
             Column(
               children: [
                 Container(
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        color: Colors.black26,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.black26,
+                        ),
                         width: 72,
                         height: 100,
-                        child: Image.network(
-                        widget.foto,
-                        fit: BoxFit.cover,
-                      ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                          widget.foto,
+                          fit: BoxFit.cover,
+                                              ),
+                        ),
 
                       ),
                       Column(
